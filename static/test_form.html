@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Story Generator - Test Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .form-title {
+            text-align: center;
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .submit-btn {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: #5a6fd8;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="form-title">💕 Love Story Generator 💕</h1>
+        
+        <form id="loveStoryForm">
+            <div class="form-group">
+                <label for="name1">First Character's Name:</label>
+                <input type="text" id="name1" name="name1" value="Alex" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="name2">Second Character's Name:</label>
+                <input type="text" id="name2" name="name2" value="Jordan" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="setting">Where does your love story take place?</label>
+                <input type="text" id="setting" name="setting" value="a charming small town" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="how_met">How did they first meet?</label>
+                <input type="text" id="how_met" name="how_met" value="by chance at a bookstore" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="shared_interest">What do they both love or have in common?</label>
+                <input type="text" id="shared_interest" name="shared_interest" value="reading and writing" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="challenge">What challenge or obstacle did they have to overcome?</label>
+                <input type="text" id="challenge" name="challenge" value="long distance relationship" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="special_thing">What makes their love story special or unique?</label>
+                <textarea id="special_thing" name="special_thing" rows="3" required>their ability to understand each other without words</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="story_length">How long should the story be?</label>
+                <select id="story_length" name="story_length" required>
+                    <option value="short">Short</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="long">Long</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="submit-btn">Generate Love Story</button>
+        </form>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('loveStoryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Create Tally-like webhook payload
+            const webhookPayload = {
+                eventBody: {
+                    event: {
+                        formId: "test_form_123",
+                        formResponses: [{
+                            responseId: "response_" + Date.now(),
+                            submittedAt: new Date().toISOString(),
+                            answers: Object.entries(data).map(([key, value]) => ({
+                                fieldId: key,
+                                value: value
+                            }))
+                        }]
+                    }
+                }
+            };
+            
+            try {
+                const response = await fetch('/webhook/tally', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(webhookPayload)
+                });
+                
+                const result = await response.json();
+                const resultDiv = document.getElementById('result');
+                
+                if (response.ok && result.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Story Generated Successfully!</h3>
+                        <p><a href="${result.story_url}" target="_blank">View Your Story</a></p>
+                        <p><a href="${result.download_url}" target="_blank">Download Story</a></p>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `<h3>❌ Error</h3><p>${result.error || 'Unknown error occurred'}</p>`;
+                }
+                
+                resultDiv.style.display = 'block';
+                
+            } catch (error) {
+                const resultDiv = document.getElementById('result');
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<h3>❌ Error</h3><p>${error.message}</p>`;
+                resultDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html> 

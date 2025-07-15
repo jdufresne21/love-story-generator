@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Create Your Love Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff6b9d;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .result a {
+            display: inline-block;
+            background: #ff6b9d;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+
+        .result a:hover {
+            background: #c44569;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💕 Create Your Love Story</h1>
+            <p>Tell us about your love and we'll create a magical story just for you</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="loveStoryForm">
+                <div class="form-group">
+                    <label for="your_name">Your Name</label>
+                    <input type="text" id="your_name" name="your_name" required placeholder="Enter your name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="partner_name">Your Partner's Name</label>
+                    <input type="text" id="partner_name" name="partner_name" required placeholder="Enter your partner's name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="how_met"><span class="emoji">🥰</span>How did you two meet?</label>
+                    <textarea id="how_met" name="how_met" required placeholder="Tell us the story of how you first met..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="favorite_memory"><span class="emoji">🙊</span>What's your favorite memory together?</label>
+                    <textarea id="favorite_memory" name="favorite_memory" required placeholder="Share a special moment that makes you smile..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="love_most"><span class="emoji">❤️</span>What do you love most about them?</label>
+                    <textarea id="love_most" name="love_most" required placeholder="What makes them so special to you?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="special_song">Do you share a special song, phrase, or inside joke?</label>
+                    <textarea id="special_song" name="special_song" placeholder="Any special things that are just yours? (optional)"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">✨ Generate Our Love Story ✨</button>
+            </form>
+            
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Creating your magical love story... 💕</p>
+            </div>
+            
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loveStoryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('result').style.display = 'none';
+            
+            // Create webhook payload
+            const webhookPayload = {
+                eventBody: {
+                    event: {
+                        formId: "love_story_form",
+                        formResponses: [{
+                            responseId: "response_" + Date.now(),
+                            submittedAt: new Date().toISOString(),
+                            answers: Object.entries(data).map(([key, value]) => ({
+                                fieldId: key,
+                                value: value
+                            }))
+                        }]
+                    }
+                }
+            };
+            
+            try {
+                console.log('Sending request to server...');
+                const response = await fetch('/webhook/tally', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(webhookPayload)
+                });
+                
+                console.log('Response received:', response.status, response.statusText);
+                const result = await response.json();
+                console.log('Result:', result);
+                
+                const resultDiv = document.getElementById('result');
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('show');
+                
+                if (response.ok && result.success) {
+                    console.log('Success! Showing result...');
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>🎉 Your Love Story is Ready!</h3>
+                        <p>We've created a beautiful story just for you and your love.</p>
+                        <a href="${result.story_url}" target="_blank">📖 Read Our Story</a>
+                        <a href="${result.download_url}" target="_blank">📥 Download Story</a>
+                        <br><br>
+                        <p><strong>Direct Link:</strong> <a href="${result.story_url}">${window.location.origin}${result.story_url}</a></p>
+                    `;
+                } else {
+                    console.log('Error in response:', result);
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `<h3>❌ Oops!</h3><p>${result.error || 'Something went wrong. Please try again.'}</p>`;
+                }
+                
+                resultDiv.style.display = 'block';
+                
+                // Scroll to result
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('loading').classList.remove('show');
+                const resultDiv = document.getElementById('result');
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<h3>❌ Connection Error</h3><p>Error: ${error.message}</p>`;
+                resultDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html> 
