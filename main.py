@@ -21,7 +21,12 @@ def main():
     # Initialize components
     try:
         config = Config()
-        story_generator = StoryGenerator(config.openai_api_key)
+        story_generator = StoryGenerator(
+            api_key=config.openai_api_key,
+            model_name=config.model_name,
+            max_tokens=config.max_tokens,
+            temperature=config.temperature
+        )
         form_handler = FormHandler()
         
         print("Let's create your personalized love story!")

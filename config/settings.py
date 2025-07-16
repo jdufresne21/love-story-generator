@@ -16,9 +16,9 @@ class Config:
         self.openai_api_key = os.getenv('OPENAI_API_KEY')
         
         # Model configuration
-        self.model_name = "gpt-4o-mini"  # Using the model you specified
-        self.max_tokens = 1500
-        self.temperature = 0.8  # Higher temperature for more creative stories
+        self.model_name = "gpt-4-turbo-preview"  # GPT-4 Turbo for better quality and cost efficiency
+        self.max_tokens = 2000  # Increased for longer, more detailed stories
+        self.temperature = 0.7  # Slightly lower for more consistent quality while maintaining creativity
         
         # Tally configuration (for future integration)
         self.tally_api_url = os.getenv('TALLY_API_URL', '')

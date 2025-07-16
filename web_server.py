@@ -17,7 +17,12 @@ app = Flask(__name__, static_folder='static')
 
 # Initialize components
 config = Config()
-story_generator = StoryGenerator(config.openai_api_key)
+story_generator = StoryGenerator(
+    api_key=config.openai_api_key,
+    model_name=config.model_name,
+    max_tokens=config.max_tokens,
+    temperature=config.temperature
+)
 tally_handler = TallyHandler()
 
 # HTML template for displaying the story

@@ -8,10 +8,14 @@ from typing import Dict, Optional
 class StoryGenerator:
     """Handles love story generation using OpenAI's ChatGPT API"""
     
-    def __init__(self, api_key: str):
-        """Initialize the story generator with API key"""
+    def __init__(self, api_key: str, model_name: str = "gpt-4-turbo-preview", max_tokens: int = 2000, temperature: float = 0.7):
+        """Initialize the story generator with API key and model settings"""
+        if not api_key:
+            raise ValueError("OpenAI API key is required")
         self.client = openai.OpenAI(api_key=api_key)
-        self.model = "gpt-4o-mini"
+        self.model = model_name
+        self.max_tokens = max_tokens
+        self.temperature = temperature
         
     def create_prompt(self, form_data: Dict) -> str:
         """Create a detailed prompt based on form responses"""
@@ -59,11 +63,11 @@ Create a story that captures the essence of their real love story and celebrates
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are a talented romance novelist who writes beautiful, emotional love stories."},
+                    {"role": "system", "content": "You are a talented romance novelist who writes beautiful, emotional love stories with vivid descriptions and authentic dialogue."},
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=1500,
-                temperature=0.8,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
                 presence_penalty=0.1,
                 frequency_penalty=0.1
             )
