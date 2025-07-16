@@ -125,30 +125,110 @@ def home():
     <head>
         <title>Love Story Generator</title>
         <style>
-            body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-            .container { background: #f9f9f9; padding: 30px; border-radius: 10px; }
-            .btn { display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; margin: 10px 5px; }
+            body { 
+                font-family: 'Georgia', serif; 
+                max-width: 800px; 
+                margin: 50px auto; 
+                padding: 20px; 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+            }
+            .container { 
+                background: white; 
+                padding: 40px; 
+                border-radius: 20px; 
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                text-align: center;
+            }
+            h1 {
+                color: #333;
+                font-size: 2.5em;
+                margin-bottom: 20px;
+                font-weight: 300;
+            }
+            p {
+                color: #666;
+                font-size: 1.1em;
+                line-height: 1.6;
+                margin-bottom: 15px;
+            }
+            .features {
+                display: flex;
+                justify-content: space-around;
+                margin: 30px 0;
+                flex-wrap: wrap;
+            }
+            .feature {
+                flex: 1;
+                min-width: 200px;
+                margin: 10px;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 15px;
+                border-left: 4px solid #667eea;
+            }
+            .feature h3 {
+                color: #333;
+                margin-bottom: 10px;
+            }
+            .btn { 
+                display: inline-block; 
+                background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%); 
+                color: white; 
+                padding: 18px 40px; 
+                text-decoration: none; 
+                border-radius: 50px; 
+                margin: 20px 10px; 
+                font-size: 18px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(255, 107, 157, 0.3);
+            }
+            .status {
+                background: #d4edda;
+                color: #155724;
+                padding: 15px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 4px solid #28a745;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <h1>💕 Love Story Generator</h1>
-            <p>This service generates personalized love stories using ChatGPT.</p>
-            <p>Submit your story details through the Tally form to get started!</p>
-            <p><strong>Status:</strong> ✅ Ready to receive form submissions</p>
-            <br>
-            <a href="/love-form" class="btn">💕 Love Story Form</a>
-            <a href="/test-form" class="btn">🧪 Test Form</a>
-            <a href="/health" class="btn">🏥 Health Check</a>
+            <p>Create beautiful, personalized love stories using advanced AI technology.</p>
+            <p>Share your love story details and we'll craft a magical narrative just for you and your partner.</p>
+            
+            <div class="status">
+                <strong>✨ Ready to create your love story!</strong>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <h3>🎨 Personalized</h3>
+                    <p>Every story is unique, crafted from your real experiences and memories.</p>
+                </div>
+                <div class="feature">
+                    <h3>🤖 AI-Powered</h3>
+                    <p>Using the latest GPT-4 Turbo technology for rich, emotional storytelling.</p>
+                </div>
+                <div class="feature">
+                    <h3>💾 Downloadable</h3>
+                    <p>Save your story as a text file to keep forever and share with loved ones.</p>
+                </div>
+            </div>
+            
+            <a href="/love-form" class="btn">💕 Create Your Love Story</a>
         </div>
     </body>
     </html>
     """
 
-@app.route('/test-form')
-def test_form():
-    """Serve the test form"""
-    return app.send_static_file('test_form.html')
+
 
 @app.route('/love-form')
 def love_form():
