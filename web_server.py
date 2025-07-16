@@ -17,8 +17,23 @@ try:
     from reportlab.lib.pagesizes import A4
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib.colors import HexColor
+    from reportlab.lib.colors import HexColor, Color
     PDF_AVAILABLE = True
+    
+    # Helper function to safely create colors
+    def safe_color(hex_code):
+        try:
+            return HexColor(hex_code)
+        except:
+            # Fallback to basic colors if HexColor fails
+            color_map = {
+                '#c44569': Color(0.77, 0.27, 0.41),  # Pink
+                '#667eea': Color(0.40, 0.49, 0.92),  # Blue
+                '#333333': Color(0.20, 0.20, 0.20),  # Dark gray
+                '#666666': Color(0.40, 0.40, 0.40),  # Gray
+                '#28a745': Color(0.16, 0.65, 0.27),  # Green
+            }
+            return color_map.get(hex_code, Color(0, 0, 0))  # Default to black
 except ImportError:
     # PDF generation will fall back to text files
     pass
@@ -445,7 +460,7 @@ Story ID: {story_id}
         fontSize=24,
         spaceAfter=30,
         alignment=1,  # Center
-        textColor=HexColor('#c44569'),
+        textColor=safe_color('#c44569'),
         fontName='Helvetica-Bold'
     )
     
@@ -456,7 +471,7 @@ Story ID: {story_id}
         fontSize=14,
         spaceAfter=20,
         alignment=1,  # Center
-        textColor=HexColor('#667eea'),
+        textColor=safe_color('#667eea'),
         fontName='Helvetica'
     )
     
@@ -467,7 +482,7 @@ Story ID: {story_id}
         fontSize=12,
         spaceAfter=12,
         alignment=0,  # Left
-        textColor=HexColor('#333333'),
+        textColor=safe_color('#333333'),
         fontName='Helvetica',
         leading=18
     )
@@ -479,7 +494,7 @@ Story ID: {story_id}
         fontSize=10,
         spaceAfter=8,
         alignment=0,  # Left
-        textColor=HexColor('#666666'),
+        textColor=safe_color('#666666'),
         fontName='Helvetica'
     )
     
@@ -510,7 +525,7 @@ Story ID: {story_id}
         fontSize=18,
         spaceAfter=20,
         alignment=1,  # Center
-        textColor=HexColor('#28a745'),
+        textColor=safe_color('#28a745'),
         fontName='Helvetica-Bold'
     )
     story_elements.append(Paragraph(creative_title, title_style))
