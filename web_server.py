@@ -489,11 +489,10 @@ Story ID: {story_id}
         fontSize=12,
         spaceAfter=12,
         alignment=0,  # Left
-        textColor=safe_color('#333333'),
+        textColor=safe_color('#333333') or Color('#333333'),  # Handle None case
         fontName='Helvetica',
         leading=18
     )
-    
     # Meta info style
     meta_style = ParagraphStyle(
         'CustomMeta',
@@ -509,9 +508,7 @@ Story ID: {story_id}
     story_elements.append(Paragraph("💕 Told with Love 💕", title_style))
     story_elements.append(Spacer(1, 20))
     
-    # Add subtitle
-    story_elements.append(Paragraph("A Love Story", subtitle_style))
-    story_elements.append(Spacer(1, 30))
+
     
     # Extract the creative title from the story content
     paragraphs = story_text.split('\n\n')
