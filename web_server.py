@@ -7,7 +7,19 @@ from flask import Flask, request, jsonify, render_template_string
 import json
 import os
 import sys
+import datetime
+from io import BytesIO
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# PDF generation imports
+try:
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.colors import HexColor
+    PDF_AVAILABLE = True
+except ImportError:
+    PDF_AVAILABLE = False
 
 from src.story_generator import StoryGenerator
 from src.tally_handler import TallyHandler
@@ -390,16 +402,29 @@ def download_story(story_id):
     story_text = story_info['story_text']
     story_data = story_info['story_data']
     
+    # Check if PDF generation is available
+    if not PDF_AVAILABLE:
+        # Fallback to text file if PDF generation is not available
+        from flask import Response
+        download_content = f"""TOLD WITH LOVE
+
+Characters: {story_data.get('name1', 'Unknown')} & {story_data.get('name2', 'Unknown')}
+How they met: {story_data.get('how_met', 'Unknown')}
+Favorite memory: {story_data.get('favorite_memory', 'Unknown')}
+Generated: {datetime.datetime.now().strftime('%B %d, %Y at %I:%M %p')}
+
+{story_text}
+
+---
+This love story was created with ❤️ by Told with Love
+Generated on {datetime.datetime.now().strftime('%B %d, %Y')}
+Story ID: {story_id}
+"""
+        response = Response(download_content, mimetype='text/plain')
+        response.headers['Content-Disposition'] = f'attachment; filename=told_with_love_{story_id}.txt'
+        return response
+    
     # Generate beautiful PDF
-    from reportlab.lib.pagesizes import letter, A4
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib.units import inch
-    from reportlab.lib.colors import HexColor
-    from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.ttfonts import TTFont
-    from io import BytesIO
-    import datetime
     
     # Create PDF in memory
     buffer = BytesIO()
