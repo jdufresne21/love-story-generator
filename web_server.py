@@ -489,32 +489,34 @@ Story ID: {story_id}
     story_elements.append(Paragraph("A Love Story", subtitle_style))
     story_elements.append(Spacer(1, 30))
     
-    # Add story metadata
+    # Generate personalized title based on story content
     name1 = story_data.get('name1', 'Unknown')
     name2 = story_data.get('name2', 'Unknown')
     how_met = story_data.get('how_met', 'Unknown')
-    favorite_memory = story_data.get('favorite_memory', 'Unknown')
-    love_most = story_data.get('love_most', 'Unknown')
     
-    meta_info = f"""
-    <b>Characters:</b> {name1} & {name2}<br/>
-    <b>How they met:</b> {how_met[:100]}{'...' if len(how_met) > 100 else ''}<br/>
-    <b>Favorite memory:</b> {favorite_memory[:100]}{'...' if len(favorite_memory) > 100 else ''}<br/>
-    <b>Generated:</b> {datetime.datetime.now().strftime('%B %d, %Y at %I:%M %p')}
-    """
+    # Create a personalized title based on how they met
+    personalized_title = f"{name1} & {name2}'s Love Story"
     
-    story_elements.append(Paragraph(meta_info, meta_style))
-    story_elements.append(Spacer(1, 30))
-    
-    # Add decorative line
-    story_elements.append(Paragraph("<hr width='100%' color='#ff6b9d'/>", story_style))
+    # Add personalized title
+    title_style = ParagraphStyle(
+        'StoryTitle',
+        parent=styles['Heading2'],
+        fontSize=18,
+        spaceAfter=20,
+        alignment=1,  # Center
+        textColor=HexColor('#28a745'),
+        fontName='Helvetica-Bold'
+    )
+    story_elements.append(Paragraph(personalized_title, title_style))
     story_elements.append(Spacer(1, 20))
     
     # Add the story text (split into paragraphs)
     paragraphs = story_text.split('\n\n')
     for paragraph in paragraphs:
         if paragraph.strip():
-            story_elements.append(Paragraph(paragraph.strip(), story_style))
+            # Remove asterisks from the text
+            clean_paragraph = paragraph.strip().replace('**', '')
+            story_elements.append(Paragraph(clean_paragraph, story_style))
             story_elements.append(Spacer(1, 12))
     
     # Add footer
