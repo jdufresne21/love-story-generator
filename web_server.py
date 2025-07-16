@@ -205,8 +205,8 @@ def home():
     <body>
         <div class="container">
             <h1>💕 Love Story Generator</h1>
-            <p>Create beautiful, personalized love stories using advanced AI technology.</p>
-            <p>Share your love story details and we'll craft a magical narrative just for you and your partner.</p>
+            <p>Create beautiful, personalized love stories that capture your unique romance.</p>
+            <p>Share your special moments and we'll craft a magical narrative just for you and your partner.</p>
             
             <div class="status">
                 <strong>✨ Ready to create your love story!</strong>
@@ -218,8 +218,8 @@ def home():
                     <p>Every story is unique, crafted from your real experiences and memories.</p>
                 </div>
                 <div class="feature">
-                    <h3>🤖 AI-Powered</h3>
-                    <p>Using the latest GPT-4 Turbo technology for rich, emotional storytelling.</p>
+                    <h3>💝 Romantic</h3>
+                    <p>Beautiful, heartwarming stories that celebrate your love and connection.</p>
                 </div>
                 <div class="feature">
                     <h3>💾 Downloadable</h3>
