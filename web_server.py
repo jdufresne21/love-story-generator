@@ -13,19 +13,18 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # PDF generation imports
 PDF_AVAILABLE = False
-try:
-    from reportlab.lib.pagesizes import A4
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib.colors import HexColor, Color
-    PDF_AVAILABLE = True
-    
-    # Helper function to safely create colors
-    def safe_color(hex_code):
+
+# Helper function to safely create colors (defined globally)
+def safe_color(hex_code):
+    if not PDF_AVAILABLE:
+        return None
+    try:
+        from reportlab.lib.colors import HexColor, Color
+        return HexColor(hex_code)
+    except:
+        # Fallback to basic colors if HexColor fails
         try:
-            return HexColor(hex_code)
-        except:
-            # Fallback to basic colors if HexColor fails
+            from reportlab.lib.colors import Color
             color_map = {
                 '#c44569': Color(0.77, 0.27, 0.41),  # Pink
                 '#667eea': Color(0.40, 0.49, 0.92),  # Blue
@@ -34,6 +33,14 @@ try:
                 '#28a745': Color(0.16, 0.65, 0.27),  # Green
             }
             return color_map.get(hex_code, Color(0, 0, 0))  # Default to black
+        except:
+            return Color(0, 0, 0)  # Black as ultimate fallback
+
+try:
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    PDF_AVAILABLE = True
 except ImportError:
     # PDF generation will fall back to text files
     pass
