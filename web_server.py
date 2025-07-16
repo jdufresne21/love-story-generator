@@ -37,7 +37,7 @@ STORY_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Love Story</title>
+    <title>Your Story - Told with Love</title>
     <style>
         body {
             font-family: 'Georgia', serif;
@@ -104,7 +104,7 @@ STORY_TEMPLATE = """
 </head>
 <body>
     <div class="story-container">
-        <h1 class="story-title">💕 Your Love Story 💕</h1>
+        <h1 class="story-title">💕 Your Story 💕</h1>
         <div class="story-content">{{ story_content }}</div>
         
         <div class="story-meta">
@@ -128,7 +128,7 @@ def home():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Love Story Generator</title>
+        <title>Told with Love</title>
         <style>
             body { 
                 font-family: 'Georgia', serif; 
@@ -204,7 +204,7 @@ def home():
     </head>
     <body>
         <div class="container">
-            <h1>💕 Love Story Generator</h1>
+            <h1>💕 Told with Love</h1>
             <p>Create beautiful, personalized love stories that capture your unique romance.</p>
             <p>Share your special moments and we'll craft a magical narrative just for you and your partner.</p>
             
@@ -227,7 +227,7 @@ def home():
                 </div>
             </div>
             
-            <a href="/love-form" class="btn">💕 Create Your Love Story</a>
+            <a href="/love-form" class="btn">💕 Create Your Story</a>
         </div>
     </body>
     </html>

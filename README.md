@@ -1,6 +1,6 @@
-# Love Story Generator
+# Told with Love
 
-A simple Python application that generates personalized love stories using OpenAI's ChatGPT API.
+A beautiful web application that creates personalized love stories using advanced AI technology.
 
 ## Features
 
@@ -13,15 +13,18 @@ A simple Python application that generates personalized love stories using OpenA
 ## Setup
 
 1. Install Python dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 2. Configure your API key:
+
    - Copy `.env.example` to `.env`
    - Add your OpenAI API key to the `.env` file
 
 3. Run the application:
+
 ```bash
 python main.py
 ```
