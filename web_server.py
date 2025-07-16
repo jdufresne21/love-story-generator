@@ -12,6 +12,7 @@ from io import BytesIO
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # PDF generation imports
+PDF_AVAILABLE = False
 try:
     from reportlab.lib.pagesizes import A4
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
@@ -19,7 +20,8 @@ try:
     from reportlab.lib.colors import HexColor
     PDF_AVAILABLE = True
 except ImportError:
-    PDF_AVAILABLE = False
+    # PDF generation will fall back to text files
+    pass
 
 from src.story_generator import StoryGenerator
 from src.tally_handler import TallyHandler
