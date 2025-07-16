@@ -13,8 +13,7 @@ class Config:
         load_dotenv()
         
         # OpenAI API configuration
-        self.openai_api_key = os.getenv('OPENAI_API_KEY', 
-            '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')
+        self.openai_api_key = os.getenv('OPENAI_API_KEY')
         
         # Model configuration
         self.model_name = "gpt-4o-mini"  # Using the model you specified
