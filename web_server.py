@@ -17,6 +17,11 @@ app = Flask(__name__, static_folder='static')
 
 # Initialize components
 config = Config()
+
+# Validate API key before creating story generator
+if not config.openai_api_key:
+    raise ValueError("OpenAI API key is required. Please set the OPENAI_API_KEY environment variable.")
+
 story_generator = StoryGenerator(
     api_key=config.openai_api_key,
     model_name=config.model_name,
