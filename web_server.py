@@ -491,15 +491,19 @@ Story ID: {story_id}
     story_elements.append(Paragraph("A Love Story", subtitle_style))
     story_elements.append(Spacer(1, 30))
     
-    # Generate personalized title based on story content
-    name1 = story_data.get('name1', 'Unknown')
-    name2 = story_data.get('name2', 'Unknown')
-    how_met = story_data.get('how_met', 'Unknown')
+    # Extract the creative title from the story content
+    paragraphs = story_text.split('\n\n')
+    creative_title = "A Love Story"  # Default fallback
     
-    # Create a personalized title based on how they met
-    personalized_title = f"{name1} & {name2}'s Love Story"
+    # Look for the first paragraph that might be a title (usually the first one)
+    if paragraphs and paragraphs[0].strip():
+        first_paragraph = paragraphs[0].strip()
+        # Clean up the title (remove asterisks and extra formatting)
+        creative_title = first_paragraph.replace('**', '').replace('*', '')
+        # Remove the title paragraph from the story content
+        paragraphs = paragraphs[1:]
     
-    # Add personalized title
+    # Add creative title
     title_style = ParagraphStyle(
         'StoryTitle',
         parent=styles['Heading2'],
@@ -509,11 +513,10 @@ Story ID: {story_id}
         textColor=HexColor('#28a745'),
         fontName='Helvetica-Bold'
     )
-    story_elements.append(Paragraph(personalized_title, title_style))
+    story_elements.append(Paragraph(creative_title, title_style))
     story_elements.append(Spacer(1, 20))
     
     # Add the story text (split into paragraphs)
-    paragraphs = story_text.split('\n\n')
     for paragraph in paragraphs:
         if paragraph.strip():
             # Remove asterisks from the text
@@ -521,17 +524,7 @@ Story ID: {story_id}
             story_elements.append(Paragraph(clean_paragraph, story_style))
             story_elements.append(Spacer(1, 12))
     
-    # Add footer
-    story_elements.append(Spacer(1, 30))
-    story_elements.append(Paragraph("<hr width='100%' color='#ff6b9d'/>", story_style))
-    story_elements.append(Spacer(1, 20))
-    
-    footer_text = f"""
-    <i>This love story was created with ❤️ by Told with Love<br/>
-    Generated on {datetime.datetime.now().strftime('%B %d, %Y')}<br/>
-    Story ID: {story_id}</i>
-    """
-    story_elements.append(Paragraph(footer_text, meta_style))
+
     
     # Build PDF
     doc.build(story_elements)
