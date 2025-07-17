@@ -2,10 +2,11 @@
 Authentication Module - Handles user login, registration, and account management
 """
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
 from src.user_models import db, User, Story
+from src.payments import PaymentProcessor
 import re
 
 auth = Blueprint('auth', __name__)
@@ -103,11 +104,7 @@ def my_stories():
     
     return render_template('my_stories.html', stories=stories)
 
-@auth.route('/account/upgrade')
-@login_required
-def upgrade():
-    """Upgrade account page"""
-    return render_template('upgrade.html', user=current_user)
+
 
 @auth.route('/account/settings', methods=['GET', 'POST'])
 @login_required
@@ -141,4 +138,66 @@ def settings():
                 db.session.commit()
                 flash('Email updated successfully!', 'success')
     
-    return render_template('settings.html', user=current_user) 
+    return render_template('settings.html', user=current_user)
+
+# Payment routes
+@auth.route('/upgrade')
+@login_required
+def upgrade():
+    """Show upgrade plans"""
+    payment_processor = PaymentProcessor()
+    plans = payment_processor.get_plans()
+    return render_template('upgrade.html', plans=plans, user=current_user)
+
+@auth.route('/subscribe/<plan_type>')
+@login_required
+def subscribe(plan_type):
+    """Start subscription process"""
+    payment_processor = PaymentProcessor()
+    checkout_session_id = payment_processor.create_checkout_session(current_user, plan_type)
+    
+    if checkout_session_id:
+        return redirect(f"https://checkout.stripe.com/pay/{checkout_session_id}")
+    else:
+        flash('Error creating checkout session. Please try again.', 'error')
+        return redirect(url_for('auth.upgrade'))
+
+@auth.route('/payment/success')
+@login_required
+def payment_success():
+    """Handle successful payment"""
+    session_id = request.args.get('session_id')
+    flash('Payment successful! Your subscription is now active.', 'success')
+    return redirect(url_for('auth.account'))
+
+@auth.route('/payment/cancel')
+@login_required
+def payment_cancel():
+    """Handle cancelled payment"""
+    flash('Payment was cancelled. You can try again anytime.', 'info')
+    return redirect(url_for('auth.upgrade'))
+
+@auth.route('/billing')
+@login_required
+def billing():
+    """Manage billing and subscription"""
+    payment_processor = PaymentProcessor()
+    portal_url = payment_processor.create_portal_session(current_user)
+    
+    if portal_url:
+        return redirect(portal_url)
+    else:
+        flash('Unable to access billing portal. Please contact support.', 'error')
+        return redirect(url_for('auth.account'))
+
+@auth.route('/cancel-subscription')
+@login_required
+def cancel_subscription():
+    """Cancel user subscription"""
+    payment_processor = PaymentProcessor()
+    if payment_processor.cancel_subscription(current_user):
+        flash('Your subscription will be cancelled at the end of the current billing period.', 'info')
+    else:
+        flash('Unable to cancel subscription. Please contact support.', 'error')
+    
+    return redirect(url_for('auth.account')) 

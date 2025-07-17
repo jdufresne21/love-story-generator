@@ -6,3 +6,4 @@ flask-login==0.6.3
 flask-sqlalchemy==3.0.5
 werkzeug==2.3.7
 httpx>=0.23.0,<1.0.0
+stripe>=7.0.0

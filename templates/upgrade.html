@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade Your Plan - Told with Love</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .nav {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .nav-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .plan-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .plan-card:hover {
+            transform: translateY(-10px);
+        }
+        .plan-card.featured {
+            border: 3px solid #ff6b9d;
+            transform: scale(1.05);
+        }
+        .plan-card.featured::before {
+            content: "Most Popular";
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #ff6b9d;
+            color: white;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .plan-name {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .plan-price {
+            font-size: 3em;
+            color: #ff6b9d;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        .plan-price .currency {
+            font-size: 0.5em;
+            vertical-align: top;
+        }
+        .plan-price .period {
+            font-size: 0.3em;
+            color: #666;
+        }
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+            text-align: left;
+        }
+        .plan-features li {
+            padding: 10px 0;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+        .plan-features li::before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .plan-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .plan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 157, 0.3);
+        }
+        .plan-btn.secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .current-plan {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .flash {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .flash.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flash.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/" class="nav-brand">❤️ Told with Love</a>
+        <div class="nav-links">
+            <a href="/auth/account">My Account</a>
+            <a href="/auth/logout">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>♥ Choose Your Plan ♥</h1>
+        <p class="subtitle">Unlock more love stories and premium features</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% if user.plan_type != 'free' %}
+            <div class="current-plan">
+                Current Plan: {{ user.plan_type.title() }} - 
+                {% if user.plan_end_date %}
+                    Renews on {{ user.plan_end_date.strftime('%B %d, %Y') }}
+                {% else %}
+                    Active
+                {% endif %}
+            </div>
+        {% endif %}
+        
+        <div class="plans-container">
+            <div class="plan-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>0
+                    <span class="period">/month</span>
+                </div>
+                <ul class="plan-features">
+                    <li>1 story per month</li>
+                    <li>Basic PDF downloads</li>
+                    <li>Story history</li>
+                    <li>Email support</li>
+                </ul>
+                <div class="current-plan">Current Plan</div>
+            </div>
+            
+            <div class="plan-card">
+                <div class="plan-name">Basic</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>4.99
+                    <span class="period">/month</span>
+                </div>
+                <ul class="plan-features">
+                    <li>3 stories per month</li>
+                    <li>High-quality PDFs</li>
+                    <li>Story history</li>
+                    <li>Priority support</li>
+                </ul>
+                {% if user.plan_type == 'basic' %}
+                    <div class="current-plan">Current Plan</div>
+                {% else %}
+                    <a href="/auth/subscribe/basic" class="plan-btn">Upgrade to Basic</a>
+                {% endif %}
+            </div>
+            
+            <div class="plan-card featured">
+                <div class="plan-name">Premium</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>9.99
+                    <span class="period">/month</span>
+                </div>
+                <ul class="plan-features">
+                    <li>10 stories per month</li>
+                    <li>Premium PDF themes</li>
+                    <li>Priority support</li>
+                    <li>Story sharing</li>
+                    <li>Custom themes</li>
+                </ul>
+                {% if user.plan_type == 'premium' %}
+                    <div class="current-plan">Current Plan</div>
+                {% else %}
+                    <a href="/auth/subscribe/premium" class="plan-btn">Upgrade to Premium</a>
+                {% endif %}
+            </div>
+            
+            <div class="plan-card">
+                <div class="plan-name">Pro</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>19.99
+                    <span class="period">/month</span>
+                </div>
+                <ul class="plan-features">
+                    <li>Unlimited stories</li>
+                    <li>All premium themes</li>
+                    <li>API access</li>
+                    <li>Bulk generation</li>
+                    <li>White-label options</li>
+                    <li>Priority support</li>
+                </ul>
+                {% if user.plan_type == 'pro' %}
+                    <div class="current-plan">Current Plan</div>
+                {% else %}
+                    <a href="/auth/subscribe/pro" class="plan-btn">Upgrade to Pro</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if user.plan_type != 'free' %}
+            <div style="margin-top: 40px;">
+                <a href="/auth/billing" class="plan-btn secondary" style="width: auto; margin: 0 10px;">Manage Billing</a>
+                <a href="/auth/cancel-subscription" class="plan-btn secondary" style="width: auto; margin: 0 10px; background: #dc3545;">Cancel Subscription</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html> 

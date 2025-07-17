@@ -25,6 +25,10 @@ class User(UserMixin, db.Model):
     plan_start_date = db.Column(db.DateTime, default=datetime.utcnow)
     plan_end_date = db.Column(db.DateTime)
     
+    # Stripe integration
+    stripe_customer_id = db.Column(db.String(100))
+    stripe_subscription_id = db.Column(db.String(100))
+    
     # Usage tracking
     stories_created = db.Column(db.Integer, default=0)
     stories_this_month = db.Column(db.Integer, default=0)

@@ -15,6 +15,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Import user models and auth
 from src.user_models import db, User, Story
 from src.auth import auth
+from src.payments import PaymentProcessor
 
 # PDF generation imports
 PDF_AVAILABLE = False
@@ -302,6 +303,7 @@ def home():
             <div class="nav-links">
                 <a href="/auth/login">Login</a>
                 <a href="/auth/register" class="btn-login">Sign Up</a>
+                <a href="/auth/upgrade" style="background: #28a745; color: white;">Upgrade</a>
             </div>
         </div>
         
@@ -654,6 +656,19 @@ Story ID: {story_id}
 def health_check():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'service': 'love_story_generator'})
+
+@app.route('/webhook/stripe', methods=['POST'])
+def stripe_webhook():
+    """Handle Stripe webhook events"""
+    payload = request.get_data()
+    sig_header = request.headers.get('Stripe-Signature', '')
+    
+    payment_processor = PaymentProcessor()
+    
+    if payment_processor.handle_webhook(payload, sig_header):
+        return jsonify({'status': 'success'}), 200
+    else:
+        return jsonify({'status': 'error'}), 400
 
 # In-memory storage for stories (use a database in production)
 story_storage = {}
