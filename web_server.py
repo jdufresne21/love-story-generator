@@ -549,8 +549,8 @@ Story ID: {story_id}
     # Build PDF
     def add_loving_background(canvas, doc):
         canvas.saveState()
-        # Soft pink background
-        canvas.setFillColor(safe_color('#ffe6f2') or Color(1, 0.9, 0.95))
+        # Very light pink background that won't interfere with text
+        canvas.setFillColor(safe_color('#fef7f9') or Color(0.996, 0.969, 0.976))
         canvas.rect(0, 0, A4[0], A4[1], fill=1, stroke=0)
         canvas.restoreState()
 
