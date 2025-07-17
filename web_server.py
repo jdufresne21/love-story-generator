@@ -511,11 +511,12 @@ Story ID: {story_id}
     story_elements.append(Paragraph(header_text, title_style))
     story_elements.append(Spacer(1, 20))
     
-    # Personalized title with their names
-    name1 = story_data.get('name1', 'Unknown')
-    name2 = story_data.get('name2', 'Unknown')
-    personalized_title = f"The Love Story of {name1} & {name2}"
-    story_elements.append(Paragraph(personalized_title, subtitle_style))
+    # Extract the creative title from the story (first line)
+    story_lines = story_text.split('\n')
+    creative_title = story_lines[0].strip() if story_lines else "A Love Story"
+    
+    # Display the creative title
+    story_elements.append(Paragraph(creative_title, subtitle_style))
     story_elements.append(Spacer(1, 30))
 
     # Add decorative separator
@@ -531,8 +532,11 @@ Story ID: {story_id}
     story_elements.append(Paragraph("♥ ♥ ♥", separator_style))
     story_elements.append(Spacer(1, 20))
 
-    # Add the full story text with proper heart symbol handling
-    paragraphs = story_text.split('\n\n')
+    # Add the full story text with proper heart symbol handling (skip the first line which is the title)
+    story_lines = story_text.split('\n')
+    story_content = '\n'.join(story_lines[1:])  # Skip the first line (title)
+    
+    paragraphs = story_content.split('\n\n')
     for paragraph in paragraphs:
         if paragraph.strip():
             # Clean up markdown and replace heart symbols properly

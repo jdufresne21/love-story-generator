@@ -32,6 +32,7 @@ Their Love Story:
 - Special song/phrase/joke: {form_data.get('special_song', 'their unique bond')}
 
 Story Requirements:
+- Start with a creative, romantic title for the story (e.g., "A Symphony of Love", "When Stars Align", "The Language of Hearts")
 - Write a complete love story (800-1200 words)
 - Incorporate their actual meeting story and favorite memory
 - Include the specific things they love about each other
@@ -42,6 +43,8 @@ Story Requirements:
 - Make it heartwarming and uplifting
 - Use vivid descriptions and emotional language
 - Make it feel personal and unique to their specific relationship
+
+Format the response with the title on the first line, followed by the story content.
 
 Create a story that captures the essence of their real love story and celebrates their unique connection."""
 
