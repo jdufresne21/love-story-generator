@@ -547,7 +547,14 @@ Story ID: {story_id}
     story_elements.append(Paragraph(footer_text, footer_style))
     
     # Build PDF
-    doc.build(story_elements)
+    def add_loving_background(canvas, doc):
+        canvas.saveState()
+        # Soft pink background
+        canvas.setFillColor(safe_color('#ffe6f2') or Color(1, 0.9, 0.95))
+        canvas.rect(0, 0, A4[0], A4[1], fill=1, stroke=0)
+        canvas.restoreState()
+
+    doc.build(story_elements, onFirstPage=add_loving_background, onLaterPages=add_loving_background)
     
     # Get PDF content
     pdf_content = buffer.getvalue()
