@@ -172,9 +172,60 @@
             font-size: 1.2em;
             margin-right: 8px;
         }
+        
+        .nav {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .nav-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .nav-links .btn-login {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+        }
+        .nav-links .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
     </style>
 </head>
 <body>
+    <div class="nav">
+        <a href="/" class="nav-brand">❤️ Told with Love</a>
+        <div class="nav-links">
+            <a href="/auth/login">Login</a>
+            <a href="/auth/register" class="btn-login">Sign Up</a>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="header">
             <h1>❤️ Told with Love ❤️</h1>

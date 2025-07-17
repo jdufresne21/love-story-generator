@@ -193,6 +193,45 @@ def home():
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 min-height: 100vh;
             }
+            .nav {
+                background: white;
+                padding: 15px 30px;
+                border-radius: 15px;
+                margin-bottom: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .nav-brand {
+                font-size: 1.5em;
+                font-weight: bold;
+                color: #333;
+                text-decoration: none;
+            }
+            .nav-links {
+                display: flex;
+                gap: 20px;
+            }
+            .nav-links a {
+                color: #667eea;
+                text-decoration: none;
+                padding: 8px 16px;
+                border-radius: 20px;
+                transition: all 0.3s ease;
+            }
+            .nav-links a:hover {
+                background: #667eea;
+                color: white;
+            }
+            .nav-links .btn-login {
+                background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+                color: white;
+            }
+            .nav-links .btn-login:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+            }
             .container { 
                 background: white; 
                 padding: 40px; 
@@ -258,6 +297,14 @@ def home():
         </style>
     </head>
     <body>
+        <div class="nav">
+            <a href="/" class="nav-brand">❤️ Told with Love</a>
+            <div class="nav-links">
+                <a href="/auth/login">Login</a>
+                <a href="/auth/register" class="btn-login">Sign Up</a>
+            </div>
+        </div>
+        
         <div class="container">
             <h1>❤️ Told with Love ❤️</h1>
             <p>Create beautiful, personalized love stories that capture your unique romance.</p>
@@ -265,6 +312,7 @@ def home():
             
             <div class="status">
                 <strong>✨ Ready to create your love story!</strong>
+                <p style="margin-top: 10px; font-size: 0.9em;">Sign up for free and get 1 beautiful story per month!</p>
             </div>
             
             <div class="features">
@@ -282,7 +330,9 @@ def home():
                 </div>
             </div>
             
-            <a href="/love-form" class="btn">❤️ Create Your Story</a>
+            <a href="/auth/register" class="btn">❤️ Get Started Free</a>
+            <br>
+            <a href="/love-form" style="color: #667eea; text-decoration: none; font-size: 0.9em;">Already have an account? Create a story</a>
         </div>
     </body>
     </html>
