@@ -13,37 +13,32 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # PDF generation imports
 PDF_AVAILABLE = False
+try:
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.colors import HexColor, Color
+    PDF_AVAILABLE = True
+except ImportError:
+    # PDF generation will fall back to text files
+    pass
 
 # Helper function to safely create colors (defined globally)
 def safe_color(hex_code):
     if not PDF_AVAILABLE:
         return None
     try:
-        from reportlab.lib.colors import HexColor, Color
         return HexColor(hex_code)
     except:
         # Fallback to basic colors if HexColor fails
-        try:
-            from reportlab.lib.colors import Color
-            color_map = {
-                '#c44569': Color(0.77, 0.27, 0.41),  # Pink
-                '#667eea': Color(0.40, 0.49, 0.92),  # Blue
-                '#333333': Color(0.20, 0.20, 0.20),  # Dark gray
-                '#666666': Color(0.40, 0.40, 0.40),  # Gray
-                '#28a745': Color(0.16, 0.65, 0.27),  # Green
-            }
-            return color_map.get(hex_code, Color(0, 0, 0))  # Default to black
-        except:
-            return Color(0, 0, 0)  # Black as ultimate fallback
-
-try:
-    from reportlab.lib.pagesizes import A4
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    PDF_AVAILABLE = True
-except ImportError:
-    # PDF generation will fall back to text files
-    pass
+        color_map = {
+            '#c44569': Color(0.77, 0.27, 0.41),  # Pink
+            '#667eea': Color(0.40, 0.49, 0.92),  # Blue
+            '#333333': Color(0.20, 0.20, 0.20),  # Dark gray
+            '#666666': Color(0.40, 0.40, 0.40),  # Gray
+            '#28a745': Color(0.16, 0.65, 0.27),  # Green
+        }
+        return color_map.get(hex_code, Color(0, 0, 0))  # Default to black
 
 from src.story_generator import StoryGenerator
 from src.tally_handler import TallyHandler
@@ -140,7 +135,7 @@ STORY_TEMPLATE = """
 </head>
 <body>
     <div class="story-container">
-        <h1 class="story-title">💕 Your Story 💕</h1>
+        <h1 class="story-title">❤️ Your Story ❤️</h1>
         <div class="story-content">{{ story_content }}</div>
         
         <div class="story-meta">
@@ -240,7 +235,7 @@ def home():
     </head>
     <body>
         <div class="container">
-            <h1>💕 Told with Love</h1>
+            <h1>❤️ Told with Love ❤️</h1>
             <p>Create beautiful, personalized love stories that capture your unique romance.</p>
             <p>Share your special moments and we'll craft a magical narrative just for you and your partner.</p>
             
@@ -263,7 +258,7 @@ def home():
                 </div>
             </div>
             
-            <a href="/love-form" class="btn">💕 Create Your Story</a>
+            <a href="/love-form" class="btn">❤️ Create Your Story</a>
         </div>
     </body>
     </html>
@@ -440,7 +435,7 @@ Generated: {datetime.datetime.now().strftime('%B %d, %Y at %I:%M %p')}
 {story_text}
 
 ---
-This love story was created with ❤️ by Told with Love
+This love story was created with love by Told with Love
 Generated on {datetime.datetime.now().strftime('%B %d, %Y')}
 Story ID: {story_id}
 """
@@ -467,7 +462,7 @@ Story ID: {story_id}
         fontSize=24,
         spaceAfter=30,
         alignment=1,  # Center
-        textColor=safe_color('#c44569'),
+        textColor=safe_color('#c44569') or Color(0.77, 0.27, 0.41),  # Pink fallback
         fontName='Helvetica-Bold'
     )
     
@@ -478,7 +473,7 @@ Story ID: {story_id}
         fontSize=14,
         spaceAfter=20,
         alignment=1,  # Center
-        textColor=safe_color('#667eea'),
+        textColor=safe_color('#667eea') or Color(0.40, 0.49, 0.92),  # Blue fallback
         fontName='Helvetica'
     )
     
@@ -489,7 +484,7 @@ Story ID: {story_id}
         fontSize=12,
         spaceAfter=12,
         alignment=0,  # Left
-        textColor=safe_color('#333333') or Color('#333333'),  # Handle None case
+        textColor=safe_color('#333333') or Color(0, 0, 0),  # Black fallback
         fontName='Helvetica',
         leading=18
     )
@@ -500,45 +495,18 @@ Story ID: {story_id}
         fontSize=10,
         spaceAfter=8,
         alignment=0,  # Left
-        textColor=safe_color('#666666'),
+        textColor=safe_color('#666666') or Color(0.40, 0.40, 0.40),  # Gray fallback
         fontName='Helvetica'
     )
     
-    # Add title
-    story_elements.append(Paragraph("💕 Told with Love 💕", title_style))
+    # Add header matching the web version
+    story_elements.append(Paragraph("💕 Your Story 💕", title_style))
     story_elements.append(Spacer(1, 20))
-    
 
-    
-    # Extract the creative title from the story content
+    # Add the full story text (split into paragraphs)
     paragraphs = story_text.split('\n\n')
-    creative_title = "A Love Story"  # Default fallback
-    
-    # Look for the first paragraph that might be a title (usually the first one)
-    if paragraphs and paragraphs[0].strip():
-        first_paragraph = paragraphs[0].strip()
-        # Clean up the title (remove asterisks and extra formatting)
-        creative_title = first_paragraph.replace('**', '').replace('*', '')
-        # Remove the title paragraph from the story content
-        paragraphs = paragraphs[1:]
-    
-    # Add creative title
-    title_style = ParagraphStyle(
-        'StoryTitle',
-        parent=styles['Heading2'],
-        fontSize=18,
-        spaceAfter=20,
-        alignment=1,  # Center
-        textColor=safe_color('#28a745'),
-        fontName='Helvetica-Bold'
-    )
-    story_elements.append(Paragraph(creative_title, title_style))
-    story_elements.append(Spacer(1, 20))
-    
-    # Add the story text (split into paragraphs)
     for paragraph in paragraphs:
         if paragraph.strip():
-            # Remove asterisks from the text
             clean_paragraph = paragraph.strip().replace('**', '')
             story_elements.append(Paragraph(clean_paragraph, story_style))
             story_elements.append(Spacer(1, 12))
