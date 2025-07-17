@@ -510,32 +510,7 @@ Story ID: {story_id}
     header_text = "♥ Your Love Story ♥"
     story_elements.append(Paragraph(header_text, title_style))
     story_elements.append(Spacer(1, 30))
-    
-    # Add story details in a decorative box
-    details_data = [
-        ['Character 1:', story_data.get('name1', 'Unknown')],
-        ['Character 2:', story_data.get('name2', 'Unknown')],
-        ['Setting:', story_data.get('setting', 'Unknown')],
-        ['How They Met:', story_data.get('how_met', 'Unknown')]
-    ]
-    
-    details_table = Table(details_data, colWidths=[1.5*inch, 3.5*inch])
-    details_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (0, -1), safe_color('#f8f9fa') or Color(0.97, 0.97, 0.97)),
-        ('TEXTCOLOR', (0, 0), (0, -1), safe_color('#495057') or Color(0.29, 0.31, 0.34)),
-        ('TEXTCOLOR', (1, 0), (1, -1), safe_color('#212529') or Color(0.13, 0.15, 0.16)),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 11),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
-        ('TOPPADDING', (0, 0), (-1, -1), 8),
-        ('GRID', (0, 0), (-1, -1), 1, safe_color('#dee2e6') or Color(0.87, 0.89, 0.91)),
-        ('ROWBACKGROUNDS', (0, 0), (-1, -1), [safe_color('#ffffff') or Color(1, 1, 1), safe_color('#f8f9fa') or Color(0.97, 0.97, 0.97)])
-    ]))
-    
-    story_elements.append(details_table)
-    story_elements.append(Spacer(1, 30))
-    
+
     # Add decorative separator
     separator_style = ParagraphStyle(
         'Separator',
