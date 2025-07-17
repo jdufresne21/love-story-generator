@@ -1,0 +1,28 @@
+# Environment Variables Template for Love Story Generator
+# Copy this file to .env and fill in your actual values
+
+# OpenAI Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Database Configuration
+DATABASE_URL=sqlite:///love_stories.db
+
+# Flask Security
+SECRET_KEY=your_secret_key_here_change_this_in_production
+
+# Base URL for the application
+BASE_URL=http://localhost:3000
+
+# Stripe Configuration (for payments)
+STRIPE_SECRET_KEY=your_stripe_secret_key_here
+STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key_here
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret_here
+
+# Stripe Price IDs (create these in your Stripe dashboard)
+STRIPE_BASIC_PRICE_ID=price_your_basic_plan_id_here
+STRIPE_PREMIUM_PRICE_ID=price_your_premium_plan_id_here
+STRIPE_PRO_PRICE_ID=price_your_pro_plan_id_here
+
+# Tally Configuration (optional - for form integration)
+TALLY_API_URL=your_tally_api_url_here
+TALLY_API_KEY=your_tally_api_key_here 
