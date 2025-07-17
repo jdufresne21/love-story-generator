@@ -514,6 +514,8 @@ Story ID: {story_id}
     # Extract the creative title from the story (first line)
     story_lines = story_text.split('\n')
     creative_title = story_lines[0].strip() if story_lines else "A Love Story"
+    # Clean up any markdown formatting (asterisks, etc.)
+    creative_title = creative_title.replace('*', '').replace('**', '').strip()
     
     # Display the creative title
     story_elements.append(Paragraph(creative_title, subtitle_style))
