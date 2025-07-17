@@ -3,13 +3,18 @@
 Web Server for Love Story Generator - Handles Tally form webhooks
 """
 
-from flask import Flask, request, jsonify, render_template_string
+from flask import Flask, request, jsonify, render_template_string, render_template, flash, redirect, url_for
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 import json
 import os
 import sys
 import datetime
 from io import BytesIO
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# Import user models and auth
+from src.user_models import db, User, Story
+from src.auth import auth
 
 # PDF generation imports
 PDF_AVAILABLE = False
@@ -48,6 +53,22 @@ from src.tally_handler import TallyHandler
 from config.settings import Config
 
 app = Flask(__name__, static_folder='static')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-this')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///love_stories.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize database and login manager
+db.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Register blueprints
+app.register_blueprint(auth, url_prefix='/auth')
 
 # Initialize components
 config = Config()
@@ -591,6 +612,11 @@ if __name__ == '__main__':
     print("Starting Love Story Generator Web Server...")
     print("Webhook endpoint: http://localhost:3000/webhook/tally")
     print("Health check: http://localhost:3000/health")
+    
+    # Create database tables
+    with app.app_context():
+        db.create_all()
+        print("Database initialized")
     
     # Get port from environment variable (Railway sets this)
     port = int(os.environ.get('PORT', 3000))
