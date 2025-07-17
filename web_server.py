@@ -462,12 +462,12 @@ Story ID: {story_id}
     title_style = ParagraphStyle(
         'CustomTitle',
         parent=styles['Heading1'],
-        fontSize=28,
+        fontSize=36,
         spaceAfter=40,
         alignment=TA_CENTER,
         textColor=safe_color('#e91e63') or Color(0.91, 0.12, 0.39),  # Bright pink
         fontName='Helvetica-Bold',
-        leading=32
+        leading=40
     )
     
     # Subtitle style for story details
