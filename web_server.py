@@ -15,9 +15,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 PDF_AVAILABLE = False
 try:
     from reportlab.lib.pagesizes import A4
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.colors import HexColor, Color
+    from reportlab.lib.units import inch
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
     PDF_AVAILABLE = True
 except ImportError:
     # PDF generation will fall back to text files
@@ -443,75 +446,130 @@ Story ID: {story_id}
         response.headers['Content-Disposition'] = f'attachment; filename=told_with_love_{story_id}.txt'
         return response
     
-    # Generate beautiful PDF
+    # Generate beautiful PDF with enhanced design
     
     # Create PDF in memory
     buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=72)
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=50, leftMargin=50, topMargin=50, bottomMargin=50)
     
     # Create story elements
     story_elements = []
     
-    # Custom styles
+    # Custom styles with better fonts and colors
     styles = getSampleStyleSheet()
     
-    # Title style
+    # Enhanced title style with decorative elements
     title_style = ParagraphStyle(
         'CustomTitle',
         parent=styles['Heading1'],
-        fontSize=24,
-        spaceAfter=30,
-        alignment=1,  # Center
-        textColor=safe_color('#c44569') or Color(0.77, 0.27, 0.41),  # Pink fallback
-        fontName='Helvetica-Bold'
+        fontSize=28,
+        spaceAfter=40,
+        alignment=TA_CENTER,
+        textColor=safe_color('#e91e63') or Color(0.91, 0.12, 0.39),  # Bright pink
+        fontName='Helvetica-Bold',
+        leading=32
     )
     
-    # Subtitle style
+    # Subtitle style for story details
     subtitle_style = ParagraphStyle(
         'CustomSubtitle',
         parent=styles['Heading2'],
-        fontSize=14,
-        spaceAfter=20,
-        alignment=1,  # Center
-        textColor=safe_color('#667eea') or Color(0.40, 0.49, 0.92),  # Blue fallback
-        fontName='Helvetica'
+        fontSize=16,
+        spaceAfter=25,
+        alignment=TA_CENTER,
+        textColor=safe_color('#3f51b5') or Color(0.25, 0.32, 0.71),  # Indigo
+        fontName='Helvetica-Bold',
+        leading=20
     )
     
-    # Story text style
+    # Enhanced story text style with better readability
     story_style = ParagraphStyle(
         'CustomStory',
         parent=styles['Normal'],
-        fontSize=12,
-        spaceAfter=12,
-        alignment=0,  # Left
-        textColor=safe_color('#333333') or Color(0, 0, 0),  # Black fallback
+        fontSize=13,
+        spaceAfter=16,
+        alignment=TA_JUSTIFY,
+        textColor=safe_color('#2c3e50') or Color(0.17, 0.24, 0.31),  # Dark blue-gray
         fontName='Helvetica',
-        leading=18
+        leading=20,
+        firstLineIndent=20
     )
-    # Meta info style
+    
+    # Meta info style for story details
     meta_style = ParagraphStyle(
         'CustomMeta',
         parent=styles['Normal'],
-        fontSize=10,
-        spaceAfter=8,
-        alignment=0,  # Left
-        textColor=safe_color('#666666') or Color(0.40, 0.40, 0.40),  # Gray fallback
+        fontSize=11,
+        spaceAfter=10,
+        alignment=TA_LEFT,
+        textColor=safe_color('#7f8c8d') or Color(0.50, 0.55, 0.55),  # Gray
         fontName='Helvetica'
     )
     
-    # Add header matching the web version
-    story_elements.append(Paragraph("💕 Your Story 💕", title_style))
+    # Decorative header with proper heart symbols
+    header_text = "♥ Your Love Story ♥"
+    story_elements.append(Paragraph(header_text, title_style))
+    story_elements.append(Spacer(1, 30))
+    
+    # Add story details in a decorative box
+    details_data = [
+        ['Character 1:', story_data.get('name1', 'Unknown')],
+        ['Character 2:', story_data.get('name2', 'Unknown')],
+        ['Setting:', story_data.get('setting', 'Unknown')],
+        ['How They Met:', story_data.get('how_met', 'Unknown')]
+    ]
+    
+    details_table = Table(details_data, colWidths=[1.5*inch, 3.5*inch])
+    details_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), safe_color('#f8f9fa') or Color(0.97, 0.97, 0.97)),
+        ('TEXTCOLOR', (0, 0), (0, -1), safe_color('#495057') or Color(0.29, 0.31, 0.34)),
+        ('TEXTCOLOR', (1, 0), (1, -1), safe_color('#212529') or Color(0.13, 0.15, 0.16)),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 11),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('GRID', (0, 0), (-1, -1), 1, safe_color('#dee2e6') or Color(0.87, 0.89, 0.91)),
+        ('ROWBACKGROUNDS', (0, 0), (-1, -1), [safe_color('#ffffff') or Color(1, 1, 1), safe_color('#f8f9fa') or Color(0.97, 0.97, 0.97)])
+    ]))
+    
+    story_elements.append(details_table)
+    story_elements.append(Spacer(1, 30))
+    
+    # Add decorative separator
+    separator_style = ParagraphStyle(
+        'Separator',
+        parent=styles['Normal'],
+        fontSize=16,
+        alignment=TA_CENTER,
+        textColor=safe_color('#e91e63') or Color(0.91, 0.12, 0.39),
+        spaceAfter=20,
+        spaceBefore=20
+    )
+    story_elements.append(Paragraph("♥ ♥ ♥", separator_style))
     story_elements.append(Spacer(1, 20))
 
-    # Add the full story text (split into paragraphs)
+    # Add the full story text with proper heart symbol handling
     paragraphs = story_text.split('\n\n')
     for paragraph in paragraphs:
         if paragraph.strip():
-            clean_paragraph = paragraph.strip().replace('**', '')
+            # Clean up markdown and replace heart symbols properly
+            clean_paragraph = paragraph.strip().replace('**', '').replace('💕', '♥').replace('❤️', '♥').replace('💖', '♥')
             story_elements.append(Paragraph(clean_paragraph, story_style))
-            story_elements.append(Spacer(1, 12))
+            story_elements.append(Spacer(1, 16))
     
-
+    # Add footer with decorative elements
+    footer_style = ParagraphStyle(
+        'Footer',
+        parent=styles['Normal'],
+        fontSize=10,
+        alignment=TA_CENTER,
+        textColor=safe_color('#6c757d') or Color(0.42, 0.46, 0.49),
+        spaceBefore=30
+    )
+    
+    footer_text = f"♥ Generated with love on {datetime.datetime.now().strftime('%B %d, %Y')} ♥"
+    story_elements.append(Paragraph(footer_text, footer_style))
     
     # Build PDF
     doc.build(story_elements)
