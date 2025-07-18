@@ -301,9 +301,9 @@ def home():
         <div class="nav">
             <a href="/" class="nav-brand">❤️ Told with Love</a>
             <div class="nav-links">
+                <a href="/love-form">Create Story</a>
                 <a href="/auth/login">Login</a>
                 <a href="/auth/register" class="btn-login">Sign Up</a>
-                <a href="/auth/upgrade" style="background: #28a745; color: white;">Upgrade</a>
             </div>
         </div>
         
@@ -314,7 +314,7 @@ def home():
             
             <div class="status">
                 <strong>✨ Ready to create your love story!</strong>
-                <p style="margin-top: 10px; font-size: 0.9em;">Sign up for free and get 1 beautiful story per month!</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">Create beautiful, personalized love stories for free!</p>
             </div>
             
             <div class="features">
@@ -332,9 +332,9 @@ def home():
                 </div>
             </div>
             
-            <a href="/auth/register" class="btn">❤️ Get Started Free</a>
+            <a href="/love-form" class="btn">❤️ Create Your Love Story</a>
             <br>
-            <a href="/love-form" style="color: #667eea; text-decoration: none; font-size: 0.9em;">Already have an account? Create a story</a>
+            <a href="/auth/register" style="color: #667eea; text-decoration: none; font-size: 0.9em;">Sign up to save your stories</a>
         </div>
     </body>
     </html>
