@@ -191,7 +191,7 @@ def home():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Told with Love</title>
+        <title>✨ Story Generator</title>
         <style>
             body { 
                 font-family: 'Georgia', serif; 
@@ -302,6 +302,23 @@ def home():
                 margin: 20px 0;
                 border-left: 4px solid #28a745;
             }
+            .content-types {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+                margin: 30px 0;
+            }
+            .content-type {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 10px;
+                border: 2px solid #e9ecef;
+                transition: all 0.3s ease;
+            }
+            .content-type:hover {
+                border-color: #667eea;
+                transform: translateY(-2px);
+            }
         </style>
     </head>
     <body>
@@ -316,33 +333,48 @@ def home():
         </div>
         
         <div class="container">
-            <h1>❤️ Told with Love ❤️</h1>
-            <p>Create beautiful, personalized love stories that capture your unique romance.</p>
-            <p>Share your special moments and we'll craft a magical narrative just for you and your partner.</p>
+            <h1>✨ Story Generator ✨</h1>
+            <p>Create personalized content for any occasion - from love stories to speeches, eulogies to toasts.</p>
+            <p>Share your memories and we'll craft meaningful, heartfelt content just for you.</p>
             
             <div class="status">
-                <strong>✨ Ready to create your love story!</strong>
-                <p style="margin-top: 10px; font-size: 0.9em;">Create beautiful, personalized love stories for free!</p>
+                <strong>✨ Ready to create your content!</strong>
+                <p style="margin-top: 10px; font-size: 0.9em;">Create beautiful, personalized content for free!</p>
+            </div>
+            
+            <div class="content-types">
+                <div class="content-type">💕 Love Stories</div>
+                <div class="content-type">💒 Wedding Speeches</div>
+                <div class="content-type">🙏 Eulogies</div>
+                <div class="content-type">🎂 Birthday Speeches</div>
+                <div class="content-type">💝 Anniversary Speeches</div>
+                <div class="content-type">🎓 Graduation Speeches</div>
+                <div class="content-type">👔 Retirement Speeches</div>
+                <div class="content-type">🥂 Toasts</div>
+                <div class="content-type">🏆 Tributes</div>
+                <div class="content-type">✨ Custom Content</div>
             </div>
             
             <div class="features">
                 <div class="feature">
                     <h3>🎨 Personalized</h3>
-                    <p>Every story is unique, crafted from your real experiences and memories.</p>
+                    <p>Every piece is unique, crafted from your real experiences and memories.</p>
                 </div>
                 <div class="feature">
-                    <h3>💝 Romantic</h3>
-                    <p>Beautiful, heartwarming stories that celebrate your love and connection.</p>
+                    <h3>💝 Meaningful</h3>
+                    <p>Beautiful, heartfelt content that captures the essence of your relationships.</p>
                 </div>
                 <div class="feature">
                     <h3>💾 Downloadable</h3>
-                    <p>Save your story as a beautiful PDF to keep forever and share with loved ones.</p>
+                    <p>Save your content as a beautiful PDF to keep forever and share with loved ones.</p>
                 </div>
             </div>
             
-            <a href="/love-form" class="btn">❤️ Create Your Love Story</a>
+            <a href="/universal-form" class="btn">✨ Create Any Content</a>
             <br>
-            <a href="/auth/register" style="color: #667eea; text-decoration: none; font-size: 0.9em;">Sign up to save your stories</a>
+            <a href="/love-form" style="color: #667eea; text-decoration: none; font-size: 0.9em;">Just want a love story?</a>
+            <br>
+            <a href="/auth/register" style="color: #667eea; text-decoration: none; font-size: 0.9em;">Sign up to save your content</a>
         </div>
     </body>
     </html>
