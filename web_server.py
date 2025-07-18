@@ -50,6 +50,7 @@ def safe_color(hex_code):
         return color_map.get(hex_code, Color(0, 0, 0))  # Default to black
 
 from src.story_generator import StoryGenerator
+from src.universal_generator import UniversalGenerator
 from src.tally_handler import TallyHandler
 from config.settings import Config
 
@@ -79,6 +80,12 @@ if not config.openai_api_key:
     raise ValueError("OpenAI API key is required. Please set the OPENAI_API_KEY environment variable.")
 
 story_generator = StoryGenerator(
+    api_key=config.openai_api_key,
+    model_name=config.model_name,
+    max_tokens=config.max_tokens,
+    temperature=config.temperature
+)
+universal_generator = UniversalGenerator(
     api_key=config.openai_api_key,
     model_name=config.model_name,
     max_tokens=config.max_tokens,
@@ -299,9 +306,10 @@ def home():
     </head>
     <body>
         <div class="nav">
-            <a href="/" class="nav-brand">❤️ Told with Love</a>
+            <a href="/" class="nav-brand">✨ Story Generator</a>
             <div class="nav-links">
-                <a href="/love-form">Create Story</a>
+                <a href="/love-form">Love Stories</a>
+                <a href="/universal-form">All Content</a>
                 <a href="/auth/login">Login</a>
                 <a href="/auth/register" class="btn-login">Sign Up</a>
             </div>
@@ -346,6 +354,11 @@ def home():
 def love_form():
     """Serve the love story form"""
     return app.send_static_file('love_form.html')
+
+@app.route('/universal-form')
+def universal_form():
+    """Serve the universal story generator form"""
+    return app.send_static_file('universal_form.html')
 
 @app.route('/webhook/tally', methods=['POST'])
 def tally_webhook():
@@ -444,6 +457,98 @@ def tally_webhook():
     except Exception as e:
         logger.error(f"Exception occurred: {str(e)}", exc_info=True)
         print(f"Error processing webhook: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/webhook/universal', methods=['POST'])
+def universal_webhook():
+    """Handle universal form submissions"""
+    
+    # Create debug log file
+    import logging
+    logging.basicConfig(
+        filename='debug.log',
+        level=logging.DEBUG,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+    logger = logging.getLogger(__name__)
+    
+    try:
+        logger.info("=== NEW UNIVERSAL WEBHOOK REQUEST ===")
+        
+        # Get the webhook data
+        webhook_data = request.get_json()
+        logger.info(f"Received universal webhook data: {webhook_data is not None}")
+        
+        if not webhook_data:
+            logger.error("No webhook data received")
+            return jsonify({'error': 'No data received'}), 400
+        
+        logger.info(f"Universal webhook data keys: {list(webhook_data.keys())}")
+        print(f"Received universal webhook: {json.dumps(webhook_data, indent=2)}")
+        
+        # Extract form data from webhook
+        form_data = {}
+        try:
+            answers = webhook_data['eventBody']['event']['formResponses'][0]['answers']
+            for answer in answers:
+                form_data[answer['fieldId']] = answer['value']
+        except (KeyError, IndexError) as e:
+            logger.error(f"Failed to extract form data: {e}")
+            return jsonify({'error': 'Invalid form data format'}), 400
+        
+        logger.info(f"Extracted form data: {form_data}")
+        
+        # Validate required fields
+        required_fields = ['content_type', 'tone', 'speaker_name', 'recipient_name', 'relationship', 'occasion', 'key_memories', 'traits', 'length']
+        missing_fields = [field for field in required_fields if not form_data.get(field)]
+        
+        if missing_fields:
+            logger.error(f"Missing required fields: {missing_fields}")
+            return jsonify({'error': f'Missing required fields: {", ".join(missing_fields)}'}), 400
+        
+        logger.info("Form data validated successfully")
+        
+        # Generate content using universal generator
+        logger.info("Starting content generation...")
+        content_text = universal_generator.generate_content(form_data)
+        logger.info(f"Content generation result: {content_text is not None}")
+        
+        if not content_text:
+            logger.error("Failed to generate content")
+            return jsonify({'error': 'Failed to generate content'}), 500
+        
+        logger.info("Content generated successfully")
+        
+        # Create a unique content ID for the URL
+        from datetime import datetime
+        import re
+        content_id = f"content_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        
+        logger.info(f"Created content ID: {content_id}")
+        
+        # Store the content temporarily (in production, use a database)
+        story_storage[content_id] = {
+            'story_text': content_text,
+            'story_data': form_data,
+            'filename': f'universal_{content_id}.json'
+        }
+        
+        logger.info("Content stored in memory successfully")
+        
+        # Return success response
+        response_data = {
+            'success': True,
+            'message': 'Content generated successfully',
+            'story_url': f'/story/{content_id}',
+            'download_url': f'/download/{content_id}'
+        }
+        logger.info(f"Returning success response: {response_data}")
+        
+        return jsonify(response_data)
+        
+    except Exception as e:
+        logger.error(f"Exception occurred: {str(e)}", exc_info=True)
+        print(f"Error processing universal webhook: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/story/<story_id>')

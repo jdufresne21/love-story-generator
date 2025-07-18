@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Story Generator - Create Any Type of Content</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff6b9d;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .result a {
+            display: inline-block;
+            background: #ff6b9d;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+
+        .result a:hover {
+            background: #c44569;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        .nav {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .nav-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .nav-links .btn-login {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+        }
+        .nav-links .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/" class="nav-brand">✨ Story Generator</a>
+        <div class="nav-links">
+            <a href="/love-form">Love Stories</a>
+            <a href="/auth/login">Login</a>
+            <a href="/auth/register" class="btn-login">Sign Up</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>✨ Story Generator ✨</h1>
+            <p>Create personalized speeches, stories, and content for any occasion</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="universalForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="content_type"><span class="emoji">📝</span>Content Type</label>
+                        <select id="content_type" name="content_type" required>
+                            <option value="">Select content type...</option>
+                            <option value="love_story">Love Story</option>
+                            <option value="wedding_speech">Wedding Speech</option>
+                            <option value="eulogy">Eulogy</option>
+                            <option value="birthday_speech">Birthday Speech</option>
+                            <option value="anniversary_speech">Anniversary Speech</option>
+                            <option value="graduation_speech">Graduation Speech</option>
+                            <option value="retirement_speech">Retirement Speech</option>
+                            <option value="toast">Toast</option>
+                            <option value="tribute">Tribute</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tone"><span class="emoji">🎭</span>Tone</label>
+                        <select id="tone" name="tone" required>
+                            <option value="">Select tone...</option>
+                            <option value="romantic">Romantic</option>
+                            <option value="heartfelt">Heartfelt</option>
+                            <option value="humorous">Humorous</option>
+                            <option value="formal">Formal</option>
+                            <option value="casual">Casual</option>
+                            <option value="inspirational">Inspirational</option>
+                            <option value="nostalgic">Nostalgic</option>
+                            <option value="celebratory">Celebratory</option>
+                            <option value="reverent">Reverent</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="speaker_name"><span class="emoji">👤</span>Your Name</label>
+                        <input type="text" id="speaker_name" name="speaker_name" required placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="recipient_name"><span class="emoji">💝</span>Recipient Name(s)</label>
+                        <input type="text" id="recipient_name" name="recipient_name" required placeholder="Who is this for?">
+                        <div class="help-text">For multiple people, separate with commas</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="relationship"><span class="emoji">🤝</span>Your Relationship</label>
+                    <input type="text" id="relationship" name="relationship" required placeholder="e.g., spouse, parent, friend, colleague">
+                </div>
+
+                <div class="form-group">
+                    <label for="occasion"><span class="emoji">🎉</span>Occasion</label>
+                    <input type="text" id="occasion" name="occasion" required placeholder="e.g., wedding, birthday, memorial, graduation">
+                </div>
+
+                <div class="form-group">
+                    <label for="key_memories"><span class="emoji">📖</span>Key Memories & Stories</label>
+                    <textarea id="key_memories" name="key_memories" required placeholder="Share special moments, funny stories, or meaningful experiences..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="traits"><span class="emoji">⭐</span>Special Traits & Qualities</label>
+                    <textarea id="traits" name="traits" required placeholder="What makes this person special? Their personality, values, achievements..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="quotes_phrases"><span class="emoji">💬</span>Special Quotes or Phrases</label>
+                    <textarea id="quotes_phrases" name="quotes_phrases" placeholder="Any favorite sayings, inside jokes, or meaningful quotes (optional)"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="length"><span class="emoji">📏</span>Desired Length</label>
+                        <select id="length" name="length" required>
+                            <option value="">Select length...</option>
+                            <option value="short">Short (2-3 minutes)</option>
+                            <option value="medium">Medium (3-5 minutes)</option>
+                            <option value="long">Long (5-10 minutes)</option>
+                            <option value="very_long">Very Long (10+ minutes)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="custom_type"><span class="emoji">🎯</span>Custom Type (if selected)</label>
+                        <input type="text" id="custom_type" name="custom_type" placeholder="Describe your custom content type">
+                        <div class="help-text">Only fill if you selected "Custom" above</div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">✨ Generate Your Content ✨</button>
+            </form>
+            
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Creating your personalized content... ✨</p>
+            </div>
+            
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('universalForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('result').style.display = 'none';
+            
+            // Create webhook payload
+            const webhookPayload = {
+                eventBody: {
+                    event: {
+                        formId: "universal_story_form",
+                        formResponses: [{
+                            responseId: "response_" + Date.now(),
+                            submittedAt: new Date().toISOString(),
+                            answers: Object.entries(data).map(([key, value]) => ({
+                                fieldId: key,
+                                value: value
+                            }))
+                        }]
+                    }
+                }
+            };
+            
+            try {
+                console.log('Sending request to server...');
+                const response = await fetch('/webhook/universal', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(webhookPayload)
+                });
+                
+                console.log('Response received:', response.status, response.statusText);
+                const result = await response.json();
+                console.log('Result:', result);
+                
+                const resultDiv = document.getElementById('result');
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('show');
+                
+                if (response.ok && result.success) {
+                    console.log('Success! Showing result...');
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>🎉 Your Content is Ready!</h3>
+                        <p>We've created personalized content just for you.</p>
+                        <a href="${result.story_url}" target="_blank">📖 Read Your Content</a>
+                        <a href="${result.download_url}" target="_blank">📥 Download PDF</a>
+                        <br><br>
+                        <p><strong>Direct Link:</strong> <a href="${result.story_url}">${window.location.origin}${result.story_url}</a></p>
+                    `;
+                } else {
+                    console.log('Error in response:', result);
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `<h3>❌ Oops!</h3><p>${result.error || 'Something went wrong. Please try again.'}</p>`;
+                }
+                
+                resultDiv.style.display = 'block';
+                
+                // Scroll to result
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('loading').classList.remove('show');
+                const resultDiv = document.getElementById('result');
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<h3>❌ Connection Error</h3><p>Error: ${error.message}</p>`;
+                resultDiv.style.display = 'block';
+            }
+        });
+
+        // Show/hide custom type field based on content type selection
+        document.getElementById('content_type').addEventListener('change', function() {
+            const customTypeField = document.getElementById('custom_type').parentElement;
+            if (this.value === 'custom') {
+                customTypeField.style.display = 'block';
+            } else {
+                customTypeField.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 
