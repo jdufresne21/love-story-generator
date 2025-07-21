@@ -440,6 +440,58 @@
                 customTypeField.style.display = 'none';
             }
         });
+
+        // Handle URL parameters to pre-fill form
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Pre-fill form based on URL parameters
+        window.addEventListener('DOMContentLoaded', function() {
+            const contentType = getUrlParameter('type');
+            if (contentType) {
+                const contentTypeSelect = document.getElementById('content_type');
+                contentTypeSelect.value = contentType;
+                
+                // Trigger the change event to show/hide custom type field
+                contentTypeSelect.dispatchEvent(new Event('change'));
+                
+                // Suggest appropriate tone and length based on content type
+                const suggestions = {
+                    'love_story': { tone: 'romantic', length: 'medium' },
+                    'wedding_speech': { tone: 'heartfelt', length: 'medium' },
+                    'eulogy': { tone: 'reverent', length: 'medium' },
+                    'birthday_speech': { tone: 'celebratory', length: 'short' },
+                    'anniversary_speech': { tone: 'romantic', length: 'medium' },
+                    'graduation_speech': { tone: 'inspirational', length: 'medium' },
+                    'retirement_speech': { tone: 'formal', length: 'medium' },
+                    'toast': { tone: 'casual', length: 'short' },
+                    'tribute': { tone: 'heartfelt', length: 'medium' },
+                    'custom': { tone: 'heartfelt', length: 'medium' }
+                };
+                
+                const suggestion = suggestions[contentType];
+                if (suggestion) {
+                    const toneSelect = document.getElementById('tone');
+                    const lengthSelect = document.getElementById('length');
+                    
+                    if (toneSelect && !toneSelect.value) {
+                        toneSelect.value = suggestion.tone;
+                    }
+                    if (lengthSelect && !lengthSelect.value) {
+                        lengthSelect.value = suggestion.length;
+                    }
+                }
+                
+                // Scroll to form
+                document.querySelector('.form-container').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }
+        });
     </script>
 </body>
 </html> 

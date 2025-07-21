@@ -314,10 +314,15 @@ def home():
                 border-radius: 10px;
                 border: 2px solid #e9ecef;
                 transition: all 0.3s ease;
+                text-decoration: none;
+                color: #333;
+                display: block;
             }
             .content-type:hover {
                 border-color: #667eea;
                 transform: translateY(-2px);
+                background: #e3f2fd;
+                color: #667eea;
             }
         </style>
     </head>
@@ -343,16 +348,16 @@ def home():
             </div>
             
             <div class="content-types">
-                <div class="content-type">💕 Love Stories</div>
-                <div class="content-type">💒 Wedding Speeches</div>
-                <div class="content-type">🙏 Eulogies</div>
-                <div class="content-type">🎂 Birthday Speeches</div>
-                <div class="content-type">💝 Anniversary Speeches</div>
-                <div class="content-type">🎓 Graduation Speeches</div>
-                <div class="content-type">👔 Retirement Speeches</div>
-                <div class="content-type">🥂 Toasts</div>
-                <div class="content-type">🏆 Tributes</div>
-                <div class="content-type">✨ Custom Content</div>
+                <a href="/universal-form?type=love_story" class="content-type">💕 Love Stories</a>
+                <a href="/universal-form?type=wedding_speech" class="content-type">💒 Wedding Speeches</a>
+                <a href="/universal-form?type=eulogy" class="content-type">🙏 Eulogies</a>
+                <a href="/universal-form?type=birthday_speech" class="content-type">🎂 Birthday Speeches</a>
+                <a href="/universal-form?type=anniversary_speech" class="content-type">💝 Anniversary Speeches</a>
+                <a href="/universal-form?type=graduation_speech" class="content-type">🎓 Graduation Speeches</a>
+                <a href="/universal-form?type=retirement_speech" class="content-type">👔 Retirement Speeches</a>
+                <a href="/universal-form?type=toast" class="content-type">🥂 Toasts</a>
+                <a href="/universal-form?type=tribute" class="content-type">🏆 Tributes</a>
+                <a href="/universal-form?type=custom" class="content-type">✨ Custom Content</a>
             </div>
             
             <div class="features">
